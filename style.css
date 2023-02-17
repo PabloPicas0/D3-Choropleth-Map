@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+    width: 960px;
+    height: 600px;
+    margin: 0 auto;
+}
+
+#title {
+    text-align: center;
+}
+
+#description {
+    text-align: center;
+}
