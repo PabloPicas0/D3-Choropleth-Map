@@ -8,11 +8,8 @@ const educationData =
 const countyData = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
 
 const w = 960;
-const h = 600;
+const h = 650;
 const margin = { top: 40, bottom: 20, left: 10, right: 10 };
-
-const innerWidth = w - margin.left - margin.right;
-const innerHeight = h - margin.bottom - margin.top;
 
 const svg = d3.select("main").append("svg").attr("width", w).attr("height", h);
 const container = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -23,6 +20,12 @@ const render = (data) => {
   //Minimum and maximum values od education degrees
   const legendMin = d3.min(education, (data) => data.bachelorsOrHigher);
   const legendMax = d3.max(education, (data) => data.bachelorsOrHigher);
+
+  //Draw path for map
+  const path = d3.geoPath();
+
+  //Source: https://gist.github.com/almccon/410b4eb5cad61402c354afba67a878b8
+  const geojsonCounties = topojson.feature(country, country.objects.counties);
 
   //Legend scale
   const xScale = d3.scaleLinear().domain([legendMin, legendMax]).rangeRound([600, 860]);
@@ -68,8 +71,36 @@ const render = (data) => {
   //Legend Axis
   legend.call(xAxis).call((g) => g.select(".domain").remove());
 
-  console.log(country);
-  console.log(education);
+  //Counties G element
+  const counties = container.append("g");
+
+  //Creates counties path elements
+  counties
+    .selectAll("path")
+    .data(geojsonCounties.features)
+    .enter()
+    .append("path")
+    .attr("class", "county")
+    .attr("fill", (d) => {
+      const bechelorsInfo = education.filter((elem) => d.id === elem.fips);
+
+      return colors(bechelorsInfo[0].bachelorsOrHigher);
+    })
+    .attr("data-fips", (d) => {
+      const fips = education.filter(elem => d.id === elem.fips)
+
+      return fips[0].fips
+    })
+    .attr("data-education", (d) => {
+      const dataEdu = education.filter(elem => d.id === elem.fips)
+      
+      return dataEdu[0].bachelorsOrHigher
+    })
+    .attr("d", path);
+
+  console.log("Geojson:", geojsonCounties);
+  console.log("Country:", country);
+  console.log("Education:", education);
 };
 
 //Here it is how to fetch multiple data at once
