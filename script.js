@@ -71,6 +71,33 @@ const render = (data) => {
   //Legend Axis
   legend.call(xAxis).call((g) => g.select(".domain").remove());
 
+  //onMouseOver function
+  const onMouseOver = (event) => {
+    const tooltip = d3.select("#tooltip");
+
+    const showMessage = (state, area_name, bachelorsOrHigher) => {
+      return `${area_name}, ${state} <br> Bachelor's degree or Higher: ${bachelorsOrHigher}%`;
+    };
+
+    //Data for tooltip
+    const { id } = event.target.__data__; //take id from hovered element
+    const educationInformation = education.filter((elem) => id === elem.fips); //returend value [{...}]
+    const { state, area_name, bachelorsOrHigher } = educationInformation[0];
+
+    tooltip
+      .attr("data-education", bachelorsOrHigher)
+      .style("left", `${event.clientX - 120}px`)
+      .style("top", `${event.clientY - 70}px`)
+      .style("opacity", 0.9)
+      .html(showMessage(state, area_name, bachelorsOrHigher));
+  };
+
+  const onMouseOut = () => {
+    const tooltip = d3.select("#tooltip")
+
+    tooltip.style("opacity", 0)
+  }
+
   //Counties G element
   const counties = container.append("g");
 
@@ -81,20 +108,22 @@ const render = (data) => {
     .enter()
     .append("path")
     .attr("class", "county")
+    .on("mouseover", onMouseOver)
+    .on("mouseout", onMouseOut)
     .attr("fill", (d) => {
       const bechelorsInfo = education.filter((elem) => d.id === elem.fips);
 
       return colors(bechelorsInfo[0].bachelorsOrHigher);
     })
     .attr("data-fips", (d) => {
-      const fips = education.filter(elem => d.id === elem.fips)
+      const fips = education.filter((elem) => d.id === elem.fips);
 
-      return fips[0].fips
+      return fips[0].fips;
     })
     .attr("data-education", (d) => {
-      const dataEdu = education.filter(elem => d.id === elem.fips)
-      
-      return dataEdu[0].bachelorsOrHigher
+      const dataEdu = education.filter((elem) => d.id === elem.fips);
+
+      return dataEdu[0].bachelorsOrHigher;
     })
     .attr("d", path);
 

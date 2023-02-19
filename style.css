@@ -2,6 +2,12 @@
     box-sizing: border-box;
 }
 
+:root {
+    --hover-color: brown;
+    --tooltip-color: whitesmoke;
+    --tooltip-background: black;
+}
+
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
@@ -18,4 +24,20 @@ main {
 
 #description {
     text-align: center;
+}
+
+#tooltip {
+    position: absolute;
+    opacity: 0.9;
+    transition: opacity 250ms ease-in;
+    border-radius: 10px;
+    line-height: 1.5;
+    color: var(--tooltip-color);
+    background-color: var(--tooltip-background);
+    padding: 10px 15px;
+    pointer-events: none;
+}
+
+.county:hover {
+    stroke: var(--hover-color);
 }
