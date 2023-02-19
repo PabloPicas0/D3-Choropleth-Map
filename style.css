@@ -28,7 +28,7 @@ main {
 
 #tooltip {
     position: absolute;
-    opacity: 0.9;
+    opacity: 0;
     transition: opacity 250ms ease-in;
     border-radius: 10px;
     line-height: 1.5;

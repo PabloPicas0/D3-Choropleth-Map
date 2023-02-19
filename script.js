@@ -86,8 +86,8 @@ const render = (data) => {
 
     tooltip
       .attr("data-education", bachelorsOrHigher)
-      .style("left", `${event.clientX - 120}px`)
-      .style("top", `${event.clientY - 70}px`)
+      .style("left", `${event.clientX - 140}px`)
+      .style("top", `${event.clientY - 90}px`)
       .style("opacity", 0.9)
       .html(showMessage(state, area_name, bachelorsOrHigher));
   };
@@ -99,7 +99,7 @@ const render = (data) => {
   }
 
   //Counties G element
-  const counties = container.append("g");
+  const counties = container.append("g").attr("id", "county-map");
 
   //Creates counties path elements
   counties
