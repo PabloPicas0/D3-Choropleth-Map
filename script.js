@@ -21,11 +21,23 @@ const render = (data) => {
   const legendMin = d3.min(education, (data) => data.bachelorsOrHigher);
   const legendMax = d3.max(education, (data) => data.bachelorsOrHigher);
 
+  const info = new Map();
+
+  //Set for each county id info about them in map object
+  for (let i = 0; i < education.length; i++) {
+    const { fips, state, area_name, bachelorsOrHigher } = education[i];
+
+    info.set(fips, { state: state, area_name: area_name, bachelorsOrHigher: bachelorsOrHigher });
+  }
+
   //Draw path for map
   const path = d3.geoPath();
 
+  //Documentation examples how to do Choropleth map
   //Source: https://gist.github.com/almccon/410b4eb5cad61402c354afba67a878b8
+  //Source: https://gist.github.com/mbostock/4060606
   const geojsonCounties = topojson.feature(country, country.objects.counties);
+  const geojsonStates = topojson.mesh(country, country.objects.states, (a, b) => a !== b);
 
   //Legend scale
   const xScale = d3.scaleLinear().domain([legendMin, legendMax]).rangeRound([600, 860]);
@@ -93,10 +105,10 @@ const render = (data) => {
   };
 
   const onMouseOut = () => {
-    const tooltip = d3.select("#tooltip")
+    const tooltip = d3.select("#tooltip");
 
-    tooltip.style("opacity", 0)
-  }
+    tooltip.style("opacity", 0);
+  };
 
   //Counties G element
   const counties = container.append("g").attr("id", "county-map");
@@ -111,23 +123,26 @@ const render = (data) => {
     .on("mouseover", onMouseOver)
     .on("mouseout", onMouseOut)
     .attr("fill", (d) => {
-      const bechelorsInfo = education.filter((elem) => d.id === elem.fips);
+      const { bachelorsOrHigher } = info.get(d.id);
 
-      return colors(bechelorsInfo[0].bachelorsOrHigher);
+      return colors(bachelorsOrHigher);
     })
     .attr("data-fips", (d) => {
-      const fips = education.filter((elem) => d.id === elem.fips);
+      const { fips } = info.get(d.id);
 
-      return fips[0].fips;
+      return fips;
     })
     .attr("data-education", (d) => {
-      const dataEdu = education.filter((elem) => d.id === elem.fips);
+      const { bachelorsOrHigher } = info.get(d.id);
 
-      return dataEdu[0].bachelorsOrHigher;
+      return bachelorsOrHigher;
     })
     .attr("d", path);
 
-  console.log("Geojson:", geojsonCounties);
+  // container.append("path").datum(geojsonStates).attr("class", "states").attr("d", path);
+
+  console.log("States:", geojsonStates);
+  console.log("Counties:", geojsonCounties);
   console.log("Country:", country);
   console.log("Education:", education);
 };
