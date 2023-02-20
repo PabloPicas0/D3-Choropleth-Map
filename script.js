@@ -93,8 +93,7 @@ const render = (data) => {
 
     //Data for tooltip
     const { id } = event.target.__data__; //take id from hovered element
-    const educationInformation = education.filter((elem) => id === elem.fips); //returend value [{...}]
-    const { state, area_name, bachelorsOrHigher } = educationInformation[0];
+    const { state, area_name, bachelorsOrHigher } = info.get(id);
 
     tooltip
       .attr("data-education", bachelorsOrHigher)
