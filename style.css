@@ -38,6 +38,10 @@ main {
     pointer-events: none;
 }
 
+.states {
+    fill: none;
+    stroke: white;
+}
 .county:hover {
     stroke: var(--hover-color);
 }

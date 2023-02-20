@@ -128,9 +128,7 @@ const render = (data) => {
       return colors(bachelorsOrHigher);
     })
     .attr("data-fips", (d) => {
-      const { fips } = info.get(d.id);
-      
-      return fips;
+      return d.id;
     })
     .attr("data-education", (d) => {
       const { bachelorsOrHigher } = info.get(d.id);
@@ -139,12 +137,7 @@ const render = (data) => {
     })
     .attr("d", path);
 
-  // container.append("path").datum(geojsonStates).attr("class", "states").attr("d", path);
-  
-  console.log("States:", geojsonStates);
-  console.log("Counties:", geojsonCounties);
-  console.log("Country:", country);
-  console.log("Education:", education);
+  container.append("path").datum(geojsonStates).attr("class", "states").attr("d", path);
 };
 
 //Here it is how to fetch multiple data at once
