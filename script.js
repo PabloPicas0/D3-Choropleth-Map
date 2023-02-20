@@ -27,7 +27,7 @@ const render = (data) => {
   for (let i = 0; i < education.length; i++) {
     const { fips, state, area_name, bachelorsOrHigher } = education[i];
 
-    info.set(fips, { state: state, area_name: area_name, bachelorsOrHigher: bachelorsOrHigher });
+    info.set(fips, { state: state, area_name: area_name, bachelorsOrHigher: bachelorsOrHigher, fips: fips });
   }
 
   //Draw path for map
@@ -129,7 +129,7 @@ const render = (data) => {
     })
     .attr("data-fips", (d) => {
       const { fips } = info.get(d.id);
-
+      
       return fips;
     })
     .attr("data-education", (d) => {
@@ -140,7 +140,7 @@ const render = (data) => {
     .attr("d", path);
 
   // container.append("path").datum(geojsonStates).attr("class", "states").attr("d", path);
-
+  
   console.log("States:", geojsonStates);
   console.log("Counties:", geojsonCounties);
   console.log("Country:", country);
