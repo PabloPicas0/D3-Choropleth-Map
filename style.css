@@ -6,11 +6,13 @@
     --hover-color: brown;
     --tooltip-color: whitesmoke;
     --tooltip-background: black;
+    --background-main: rgb(211, 193, 161);
 }
 
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background-main);
 }
 
 main {
